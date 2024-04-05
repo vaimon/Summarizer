@@ -1,4 +1,4 @@
-package me.vaimon.summarizer.ui.theme
+package me.vaimon.summarizer.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

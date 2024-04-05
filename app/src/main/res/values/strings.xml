@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Summarizer</string>
+    <string name="title_summarization_history">Summarization history</string>
+    <string name="lorem_ipsum_dolor_sit_amet">Lorem ipsum dolor sit amet Lorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit amet</string>
+    <string name="placeholder_input_text">The text you want to summarize...</string>
 </resources>
