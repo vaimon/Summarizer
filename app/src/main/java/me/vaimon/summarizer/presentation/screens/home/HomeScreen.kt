@@ -2,9 +2,7 @@ package me.vaimon.summarizer.presentation.screens.home
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -34,16 +30,15 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.vaimon.summarizer.R
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
+import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDestination
 import me.vaimon.summarizer.presentation.theme.OnSurfaceSecondary
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
 import me.vaimon.summarizer.presentation.theme.secondaryBackground
@@ -64,15 +60,25 @@ object HomeScreenDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val inputText by viewModel.inputText.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     HomeBody(
         inputText = inputText,
-        onInputTextChanged = viewModel::onInputTextChanged
+        onInputTextChanged = viewModel::onInputTextChanged,
+        onBtnSummarizeClick = viewModel::onBtnSummarizeClick
     )
+
+    LaunchedEffect(key1 = uiState) {
+        uiState.summarizationNavigationArg?.let {
+            viewModel.onNavigateToSummarizationHandled()
+            navController.navigate(
+                SummarizationDestination.getDestinationWithArg(it)
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,6 +86,7 @@ fun HomeScreen(
 fun HomeBody(
     inputText: String,
     onInputTextChanged: (String) -> Unit,
+    onBtnSummarizeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -126,7 +133,8 @@ fun HomeBody(
                             clipboardManager.getText()?.text?.let(onInputTextChanged)
                         })
                     PrimaryActionButton(
-                        icon = R.drawable.ic_compress, onClick = { /*TODO*/ },
+                        icon = R.drawable.ic_compress,
+                        onClick = onBtnSummarizeClick,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                     SecondaryActionButton(icon = R.drawable.ic_camera, onClick = { /*TODO*/ })
@@ -247,7 +255,11 @@ fun HomePreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            HomeBody("", {})
+            HomeBody(
+                inputText = "",
+                onInputTextChanged = {},
+                onBtnSummarizeClick = {}
+            )
         }
     }
 }

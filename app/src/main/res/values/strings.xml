@@ -2,5 +2,9 @@
     <string name="app_name">Summarizer</string>
     <string name="title_summarization_history">Summarization history</string>
     <string name="lorem_ipsum_dolor_sit_amet">Lorem ipsum dolor sit amet Lorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit amet</string>
-    <string name="placeholder_input_text">The text you want to summarize...</string>
+    <string name="placeholder_input_text">The text you want to summarize…</string>
+    <string name="title_summarization">Summarization</string>
+    <string name="desc_back">Back</string>
+    <string name="title_original_text">Original text</string>
+    <string name="title_summarized_text">Summarized text</string>
 </resources>

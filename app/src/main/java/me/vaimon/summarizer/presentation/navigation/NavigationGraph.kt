@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import me.vaimon.summarizer.presentation.screens.home.HomeScreen
 import me.vaimon.summarizer.presentation.screens.home.HomeScreenDestination
+import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDestination
+import me.vaimon.summarizer.presentation.screens.summarization.SummarizationScreen
 
 @Composable
 fun NavigationGraph() {
@@ -27,6 +29,29 @@ fun NavigationGraph() {
 
         composable(route = HomeScreenDestination.route) {
             HomeScreen(navController)
+        }
+
+        composable(
+            route = SummarizationDestination.route,
+            arguments = listOf(
+                navArgument(SummarizationDestination.argName) {
+                    type = NavType.StringType
+                }
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = springAnimationSpec
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = springAnimationSpec
+                )
+            },
+        ) {
+            SummarizationScreen(navController = navController)
         }
     }
 }

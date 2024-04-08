@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
 
+    // Animation
+    implementation(libs.lottie)
+
     // Navigation
     implementation(libs.navigation)
 
