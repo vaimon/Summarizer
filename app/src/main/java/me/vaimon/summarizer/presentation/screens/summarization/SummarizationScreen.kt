@@ -29,6 +29,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,11 +60,13 @@ fun SummarizationScreen(
     val isProcessing by viewModel.processingState.collectAsState()
     val inputText by viewModel.inputText.collectAsState()
     val processedText by viewModel.processedText.collectAsState()
+    val compressionRate by viewModel.compressionRate.collectAsState()
 
     SummarizationBody(
         isProcessing = isProcessing,
         inputText = inputText,
         processedText = processedText,
+        compressionRate = compressionRate,
         navigateUp = navController::navigateUp
     )
 }
@@ -69,6 +75,7 @@ fun SummarizationScreen(
 private fun SummarizationBody(
     inputText: String,
     processedText: String?,
+    compressionRate: Int?,
     isProcessing: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
@@ -94,6 +101,16 @@ private fun SummarizationBody(
                 TextViewer(
                     text = processedText ?: "",
                     title = stringResource(R.string.title_summarized_text),
+                    subtitle = compressionRate?.let { rate ->
+                        buildAnnotatedString {
+                            append(stringResource(id = R.string.desc_compression_rate))
+                            append(" ")
+                            pushStyle(SpanStyle(fontWeight = FontWeight.Black))
+                            append(rate.toString())
+                            append("%")
+                            toAnnotatedString()
+                        }
+                    },
                     modifier = Modifier.weight(3f)
                 )
             }
@@ -105,7 +122,8 @@ private fun SummarizationBody(
 fun TextViewer(
     text: String,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    subtitle: AnnotatedString? = null
 ) {
     Column(
         modifier = modifier
@@ -116,6 +134,13 @@ fun TextViewer(
             text = title,
             style = MaterialTheme.typography.titleMedium,
         )
+        subtitle?.let {
+            Spacer(modifier = Modifier.size(4.dp))
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
         Spacer(modifier = Modifier.size(8.dp))
         TextField(
             value = text,
@@ -181,7 +206,8 @@ fun PreviewSummarization() {
                 navigateUp = {},
                 isProcessing = false,
                 inputText = PreviewData.getLoremIpsum(500),
-                processedText = PreviewData.getLoremIpsum(100)
+                processedText = PreviewData.getLoremIpsum(100),
+                compressionRate = 57
             )
         }
     }

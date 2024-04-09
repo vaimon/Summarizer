@@ -7,4 +7,5 @@
     <string name="desc_back">Back</string>
     <string name="title_original_text">Original text</string>
     <string name="title_summarized_text">Summarized text</string>
+    <string name="desc_compression_rate">Compressed by </string>
 </resources>

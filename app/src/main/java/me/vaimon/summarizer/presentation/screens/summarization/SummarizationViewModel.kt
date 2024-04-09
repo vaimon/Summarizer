@@ -30,6 +30,12 @@ class SummarizationViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Lazily, true)
     val processedText = _processedText.asStateFlow()
 
+    val compressionRate = _processedText.map {
+        if (inputText.value.isEmpty())
+            return@map 0
+        it?.length?.let { compressedLength -> 100 - (100 * compressedLength.toDouble() / inputText.value.length).toInt() }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, 0)
+
     init {
         viewModelScope.launch {
             delay(5000)
