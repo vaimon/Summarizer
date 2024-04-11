@@ -1,6 +1,9 @@
 package me.vaimon.summarizer.presentation.screens.home
 
-import androidx.annotation.DrawableRes
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +22,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -37,15 +37,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.vaimon.summarizer.R
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
+import me.vaimon.summarizer.presentation.screens.components.PrimaryActionButton
+import me.vaimon.summarizer.presentation.screens.components.SecondaryActionButton
+import me.vaimon.summarizer.presentation.screens.scanner.ScannerDestination
 import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDestination
 import me.vaimon.summarizer.presentation.theme.OnSurfaceSecondary
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
@@ -65,10 +69,36 @@ fun HomeScreen(
     val inputText by viewModel.inputText.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
+    val context = LocalContext.current
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            navController.navigate(ScannerDestination.route)
+        } else {
+            Toast.makeText(
+                context,
+                context.getString(R.string.permission_camera_denial_warning), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     HomeBody(
         inputText = inputText,
         onInputTextChanged = viewModel::onInputTextChanged,
-        onBtnSummarizeClick = viewModel::onBtnSummarizeClick
+        onBtnSummarizeClick = viewModel::onBtnSummarizeClick,
+        onBtnCameraClick = {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                navController.navigate(ScannerDestination.route)
+            } else {
+                cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+            }
+        }
     )
 
     LaunchedEffect(key1 = uiState) {
@@ -87,6 +117,7 @@ fun HomeBody(
     inputText: String,
     onInputTextChanged: (String) -> Unit,
     onBtnSummarizeClick: () -> Unit,
+    onBtnCameraClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -137,51 +168,11 @@ fun HomeBody(
                         onClick = onBtnSummarizeClick,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
-                    SecondaryActionButton(icon = R.drawable.ic_camera, onClick = { /*TODO*/ })
+                    SecondaryActionButton(icon = R.drawable.ic_camera, onClick = onBtnCameraClick)
                 }
             }
             SummarizationHistoryGrid()
         }
-    }
-}
-
-@Composable
-fun PrimaryActionButton(
-    @DrawableRes icon: Int,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        colors = IconButtonDefaults.filledIconButtonColors(),
-        onClick = onClick,
-        modifier = modifier.size(56.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = null
-        )
-    }
-}
-
-@Composable
-fun SecondaryActionButton(
-    @DrawableRes icon: Int,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-) {
-    IconButton(
-        colors = IconButtonDefaults.filledIconButtonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryBackground
-        ),
-        enabled = enabled,
-        onClick = onClick,
-        modifier = modifier.size(42.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = null
-        )
     }
 }
 
@@ -258,7 +249,8 @@ fun HomePreview() {
             HomeBody(
                 inputText = "",
                 onInputTextChanged = {},
-                onBtnSummarizeClick = {}
+                onBtnSummarizeClick = {},
+                onBtnCameraClick = {}
             )
         }
     }

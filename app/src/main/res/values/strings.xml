@@ -8,4 +8,5 @@
     <string name="title_original_text">Original text</string>
     <string name="title_summarized_text">Summarized text</string>
     <string name="desc_compression_rate">Compressed by </string>
+    <string name="permission_camera_denial_warning">This feature is unavailable without camera permission</string>
 </resources>

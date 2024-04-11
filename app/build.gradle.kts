@@ -79,6 +79,14 @@ dependencies {
     // Animation
     implementation(libs.lottie)
 
+    // Camera
+    implementation(libs.camera.core)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.camera.mlkit)
+    implementation(libs.camera.extensions)
+
     // Navigation
     implementation(libs.navigation)
 

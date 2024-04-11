@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import me.vaimon.summarizer.presentation.screens.home.HomeScreen
 import me.vaimon.summarizer.presentation.screens.home.HomeScreenDestination
+import me.vaimon.summarizer.presentation.screens.scanner.ScannerDestination
+import me.vaimon.summarizer.presentation.screens.scanner.ScannerScreen
 import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDestination
 import me.vaimon.summarizer.presentation.screens.summarization.SummarizationScreen
 
@@ -52,6 +54,24 @@ fun NavigationGraph() {
             },
         ) {
             SummarizationScreen(navController = navController)
+        }
+
+        composable(
+            route = ScannerDestination.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = springAnimationSpec
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = springAnimationSpec
+                )
+            },
+        ) {
+            ScannerScreen(navController = navController)
         }
     }
 }
