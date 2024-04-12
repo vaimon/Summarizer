@@ -1,6 +1,6 @@
 package me.vaimon.summarizer.data.repository
 
-import me.vaimon.summarizer.data.datasource.db.CacheDataSource
+import me.vaimon.summarizer.data.datasource.CacheDataSource
 import me.vaimon.summarizer.domain.repository.CacheRepository
 import javax.inject.Inject
 

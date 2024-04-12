@@ -12,12 +12,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import me.vaimon.summarizer.domain.usecase.ReadInputTextUseCase
+import me.vaimon.summarizer.domain.usecase.SaveSummarizationUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SummarizationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val readInputTextUseCase: ReadInputTextUseCase
+    private val readInputTextUseCase: ReadInputTextUseCase,
+    private val saveSummarizationUseCase: SaveSummarizationUseCase
 ) : ViewModel() {
     private val pathToInputText =
         checkNotNull(savedStateHandle.get<String>(SummarizationDestination.argName))
@@ -38,9 +40,12 @@ class SummarizationViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            delay(5000)
             _inputText.value = readInputTextUseCase(pathToInputText)
-            _processedText.value = inputText.value.filterIndexed { i, _ -> i % 2 == 0 }
+            delay(5000)  // FIXME
+            inputText.value.filterIndexed { i, _ -> i % 2 == 0 }.let {
+                _processedText.value = it
+                saveSummarizationUseCase(inputText.value, it, compressionRate.value ?: 0)
+            }
         }
     }
 }

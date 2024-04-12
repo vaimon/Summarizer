@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -47,6 +48,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.vaimon.summarizer.R
+import me.vaimon.summarizer.presentation.models.SummarizedText
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
 import me.vaimon.summarizer.presentation.screens.components.PrimaryActionButton
 import me.vaimon.summarizer.presentation.screens.components.SecondaryActionButton
@@ -55,8 +57,7 @@ import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDest
 import me.vaimon.summarizer.presentation.theme.OnSurfaceSecondary
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
 import me.vaimon.summarizer.presentation.theme.secondaryBackground
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import me.vaimon.summarizer.util.Formatter
 
 object HomeScreenDestination : NavigationDestination {
     override val route = "home"
@@ -70,6 +71,7 @@ fun HomeScreen(
 ) {
     val inputText by viewModel.inputText.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+    val summarizationHistory by viewModel.summarizationHistory.collectAsState()
 
     val context = LocalContext.current
 
@@ -92,6 +94,7 @@ fun HomeScreen(
 
     HomeBody(
         inputText = inputText,
+        summarizationHistory = summarizationHistory,
         onInputTextChanged = viewModel::onInputTextChanged,
         onBtnSummarizeClick = viewModel::onBtnSummarizeClick,
         onBtnCameraClick = {
@@ -130,6 +133,7 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     inputText: String,
+    summarizationHistory: List<SummarizedText>,
     onInputTextChanged: (String) -> Unit,
     onBtnSummarizeClick: () -> Unit,
     onBtnCameraClick: () -> Unit,
@@ -186,13 +190,14 @@ fun HomeBody(
                     SecondaryActionButton(icon = R.drawable.ic_camera, onClick = onBtnCameraClick)
                 }
             }
-            SummarizationHistoryGrid()
+            SummarizationHistoryGrid(summarizationHistory)
         }
     }
 }
 
 @Composable
 fun SummarizationHistoryGrid(
+    summarizationHistory: List<SummarizedText>,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -211,12 +216,8 @@ fun SummarizationHistoryGrid(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
             modifier = Modifier
         ) {
-            //Fixme
-            items(18) {
-                SummarizedItem(
-                    timestamp = LocalDateTime.now(),
-                    textResult = stringResource(R.string.lorem_ipsum_dolor_sit_amet)
-                )
+            items(summarizationHistory) {
+                SummarizedItem(it)
             }
         }
     }
@@ -224,8 +225,7 @@ fun SummarizationHistoryGrid(
 
 @Composable
 fun SummarizedItem(
-    timestamp: LocalDateTime,
-    textResult: String,
+    text: SummarizedText,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -239,12 +239,12 @@ fun SummarizedItem(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp)
         ) {
             Text(
-                text = timestamp.format(DateTimeFormatter.ofPattern("dd MMMM HH:mm")),
+                text = text.timestamp.format(Formatter.labelDateTimeFormatter),
                 style = MaterialTheme.typography.labelMedium
             )
             Spacer(modifier = Modifier.size(4.dp))
             Text(
-                text = textResult,
+                text = text.summarizedText,
                 style = MaterialTheme.typography.bodySmall,
                 color = OnSurfaceSecondary,
                 overflow = TextOverflow.Ellipsis
@@ -263,6 +263,7 @@ fun HomePreview() {
         ) {
             HomeBody(
                 inputText = "",
+                summarizationHistory = emptyList(),
                 onInputTextChanged = {},
                 onBtnSummarizeClick = {},
                 onBtnCameraClick = {}

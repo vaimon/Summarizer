@@ -1,4 +1,4 @@
-package me.vaimon.summarizer.data.datasource.db
+package me.vaimon.summarizer.data.datasource
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
