@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -59,6 +60,7 @@ import java.time.format.DateTimeFormatter
 
 object HomeScreenDestination : NavigationDestination {
     override val route = "home"
+    const val SCAN_RESULT_KEY = "scanResult"
 }
 
 @Composable
@@ -84,6 +86,10 @@ fun HomeScreen(
         }
     }
 
+    val scanningResult = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<String>(HomeScreenDestination.SCAN_RESULT_KEY)?.observeAsState()
+
     HomeBody(
         inputText = inputText,
         onInputTextChanged = viewModel::onInputTextChanged,
@@ -101,12 +107,21 @@ fun HomeScreen(
         }
     )
 
-    LaunchedEffect(key1 = uiState) {
+    LaunchedEffect(uiState) {
         uiState.summarizationNavigationArg?.let {
             viewModel.onNavigateToSummarizationHandled()
             navController.navigate(
                 SummarizationDestination.getDestinationWithArg(it)
             )
+        }
+    }
+
+    LaunchedEffect(scanningResult) {
+        scanningResult?.value?.let {
+            viewModel.onScanningResultReceived(it)
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<String>(HomeScreenDestination.SCAN_RESULT_KEY)
         }
     }
 }

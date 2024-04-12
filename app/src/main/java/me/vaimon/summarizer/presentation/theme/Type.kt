@@ -32,3 +32,12 @@ val Typography = Typography(
     )
     */
 )
+
+val Typography.bodySecondaryMedium: TextStyle
+    get() = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Light,
+        fontSize = 16.sp,
+        letterSpacing = 0.25.sp,
+        color = Outline
+    )

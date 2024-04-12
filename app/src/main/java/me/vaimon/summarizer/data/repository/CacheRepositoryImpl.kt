@@ -7,9 +7,9 @@ import javax.inject.Inject
 class CacheRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource
 ) : CacheRepository {
-    override suspend fun saveInputTextToCache(inputText: String) =
+    override suspend fun saveTextToCache(inputText: String) =
         cacheDataSource.saveToCacheFile(inputText)
 
-    override suspend fun readTextFromCache(path: String) =
-        cacheDataSource.readFromCacheFile(path)
+    override suspend fun readTextFromCache(filename: String) =
+        cacheDataSource.readFromCacheFile(filename)
 }

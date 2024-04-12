@@ -20,8 +20,8 @@ class CacheDataSource @Inject constructor(
         }
     }
 
-    suspend fun readFromCacheFile(path: String): String {
-        val inputFile = File(context.cacheDir, path)
+    suspend fun readFromCacheFile(filename: String): String {
+        val inputFile = File(context.cacheDir, filename)
         return withContext(Dispatchers.IO) { inputFile.readText() }
     }
 }

@@ -54,7 +54,7 @@ android {
 }
 
 dependencies {
-// Android Core
+    // Android Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.viewmodel)
+    implementation(libs.androidx.compose.livedata)
 
     // DI
     implementation(libs.javax.inject)
@@ -86,6 +87,9 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.camera.mlkit)
     implementation(libs.camera.extensions)
+
+    // ML
+    implementation(libs.mlkit.text)
 
     // Navigation
     implementation(libs.navigation)

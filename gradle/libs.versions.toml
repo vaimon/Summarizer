@@ -12,6 +12,7 @@ espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 composeBom = "2023.08.00"
+composeLiveData = "1.6.5"
 
 navigation = "2.7.7"
 roomVersion = "2.6.1"
@@ -32,6 +33,7 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version = "composeLivedata" }
 
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 
@@ -45,6 +47,8 @@ camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 camera-mlkit = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
 camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camerax" }
+
+mlkit-text = { group = "com.google.mlkit", name = "text-recognition", version = "16.0.0" }
 
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }

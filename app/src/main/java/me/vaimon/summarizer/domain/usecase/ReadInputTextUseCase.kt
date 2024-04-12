@@ -6,6 +6,6 @@ import javax.inject.Inject
 class ReadInputTextUseCase @Inject constructor(
     private val cacheRepository: CacheRepository
 ) {
-    suspend operator fun invoke(path: String): String =
-        cacheRepository.readTextFromCache(path)
+    suspend operator fun invoke(filename: String): String =
+        cacheRepository.readTextFromCache(filename)
 }
