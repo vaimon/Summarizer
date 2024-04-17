@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import me.vaimon.summarizer.domain.entity.SummarizedTextEntity
 import me.vaimon.summarizer.domain.usecase.GetSummarizationHistoryUseCase
@@ -55,7 +56,16 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onSummarizationHistoryEntryClick(summarizedText: SummarizedText) {
+        _uiState.update { it.copy(priorSummarizationDetails = summarizedText) }
+    }
+
+    fun onHistoryEntryDetailsShown() {
+        _uiState.update { it.copy(priorSummarizationDetails = null) }
+    }
+
     data class UiState(
-        val summarizationNavigationArg: String? = null
+        val summarizationNavigationArg: String? = null,
+        val priorSummarizationDetails: SummarizedText? = null
     )
 }

@@ -6,42 +6,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import me.vaimon.summarizer.R
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
 import me.vaimon.summarizer.presentation.screens.components.PrimaryActionButton
 import me.vaimon.summarizer.presentation.screens.home.HomeScreenDestination
+import me.vaimon.summarizer.presentation.screens.scanner.components.BackButton
 import me.vaimon.summarizer.presentation.screens.scanner.components.Camera
+import me.vaimon.summarizer.presentation.screens.scanner.components.ScannedTextPreview
+import me.vaimon.summarizer.presentation.screens.scanner.components.ScanningIndicator
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
-import me.vaimon.summarizer.presentation.theme.bodySecondaryMedium
-import me.vaimon.summarizer.presentation.theme.onTranslucentBackground
-import me.vaimon.summarizer.presentation.theme.translucentBackground
 
 object ScannerDestination : NavigationDestination {
     override val route = "scanner"
@@ -130,71 +115,6 @@ private fun ScannerBody(
                 .safeDrawingPadding()
                 .padding(8.dp)
         )
-    }
-}
-
-@Composable
-fun ScannedTextPreview(
-    scannedText: String?,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center
-    ) {
-        scannedText?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        } ?: run {
-            Text(
-                text = stringResource(R.string.desc_error_scan),
-                style = MaterialTheme.typography.bodySecondaryMedium,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-fun ScanningIndicator(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.anim_scanning))
-    val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever
-    )
-    LottieAnimation(
-        composition = composition,
-        progress = { progress },
-        modifier = modifier
-    )
-}
-
-@Composable
-fun BackButton(
-    isTranslucent: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        onClick = onClick,
-        colors = IconButtonDefaults.filledIconButtonColors(
-            containerColor = if (isTranslucent)
-                MaterialTheme.colorScheme.translucentBackground
-            else
-                MaterialTheme.colorScheme.background,
-            contentColor = if (isTranslucent)
-                MaterialTheme.colorScheme.onTranslucentBackground
-            else
-                MaterialTheme.colorScheme.onBackground
-        ),
-        modifier = modifier
-    ) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
     }
 }
 
