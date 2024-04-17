@@ -4,14 +4,19 @@ import androidx.camera.core.ImageProxy
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +32,7 @@ import me.vaimon.summarizer.presentation.screens.scanner.components.Camera
 import me.vaimon.summarizer.presentation.screens.scanner.components.ScannedTextPreview
 import me.vaimon.summarizer.presentation.screens.scanner.components.ScanningIndicator
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
+import me.vaimon.summarizer.util.swapAxes
 
 object ScannerDestination : NavigationDestination {
     override val route = "scanner"
@@ -61,6 +67,7 @@ fun ScannerScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScannerBody(
     navigateBack: () -> Unit,
@@ -73,11 +80,23 @@ private fun ScannerBody(
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = uiState.isCameraMode) {
+            val sliderState = remember {
+                SliderState(.5f)
+            }
             Box(modifier = modifier.fillMaxSize()) {
                 Camera(
+                    zoom = sliderState.value,
                     isCaptureRequired = uiState.isCaptureRequired,
                     onCapture = onCapture,
                     modifier = Modifier.fillMaxSize()
+                )
+
+                Slider(
+                    state = sliderState,
+                    modifier = Modifier
+                        .height(256.dp)
+                        .swapAxes()
+                        .align(Alignment.CenterEnd)
                 )
 
                 PrimaryActionButton(
@@ -128,6 +147,14 @@ fun ScannerPreview(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            ScannerBody(
+                navigateBack = { /*TODO*/ },
+                uiState = ScannerViewModel.UiState(),
+                scannedText = "",
+                onBtnCaptureClick = { /*TODO*/ },
+                onBtnCopyClick = { /*TODO*/ },
+                onCapture = {}
+            )
         }
     }
 }
