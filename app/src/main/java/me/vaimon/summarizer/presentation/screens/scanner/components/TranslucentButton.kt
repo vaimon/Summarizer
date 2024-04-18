@@ -1,21 +1,21 @@
 package me.vaimon.summarizer.presentation.screens.scanner.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import me.vaimon.summarizer.presentation.theme.onTranslucentBackground
 import me.vaimon.summarizer.presentation.theme.translucentBackground
 
 @Composable
-fun BackButton(
-    isTranslucent: Boolean,
+fun TranslucentButton(
+    iconPainter: Painter,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isTranslucent: Boolean = true,
 ) {
     IconButton(
         onClick = onClick,
@@ -31,6 +31,6 @@ fun BackButton(
         ),
         modifier = modifier
     ) {
-        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+        Icon(painter = iconPainter, contentDescription = null)
     }
 }

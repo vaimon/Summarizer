@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 @Composable
 fun Camera(
     zoom: Float,
+    flashMode: Int,
     isCaptureRequired: Boolean,
     onCapture: (ImageProxy) -> Unit,
     modifier: Modifier = Modifier
@@ -36,7 +37,7 @@ fun Camera(
     val imageCapture = remember {
         ImageCapture.Builder()
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-            .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
+            .setFlashMode(flashMode)
             .build()
     }
 
@@ -93,5 +94,9 @@ fun Camera(
 
     LaunchedEffect(key1 = zoom, key2 = camera) {
         camera?.cameraControl?.setLinearZoom(zoom)
+    }
+
+    LaunchedEffect(key1 = flashMode, key2 = camera) {
+        imageCapture.flashMode = flashMode
     }
 }
