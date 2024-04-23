@@ -1,12 +1,15 @@
 package me.vaimon.summarizer.presentation.screens.scanner.components
 
 import android.widget.Toast
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
@@ -34,15 +37,30 @@ fun Camera(
 
     var camera by remember { mutableStateOf<Camera?>(null) }
 
+    val resolutionSelector by remember {
+        mutableStateOf(
+            ResolutionSelector.Builder()
+                .setAspectRatioStrategy(
+                    AspectRatioStrategy(
+                        AspectRatio.RATIO_16_9,
+                        AspectRatioStrategy.FALLBACK_RULE_AUTO
+                    )
+                )
+                .build()
+        )
+    }
+
     val imageCapture = remember {
         ImageCapture.Builder()
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+            .setResolutionSelector(resolutionSelector)
             .setFlashMode(flashMode)
             .build()
     }
 
     val preview = remember {
         Preview.Builder()
+            .setResolutionSelector(resolutionSelector)
             .build()
     }
 

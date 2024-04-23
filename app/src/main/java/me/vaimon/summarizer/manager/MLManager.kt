@@ -1,8 +1,8 @@
 package me.vaimon.summarizer.manager
 
+import android.graphics.Bitmap
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognizer
 import javax.inject.Inject
@@ -15,11 +15,9 @@ class MLManager @Inject constructor(
 ) {
 
     @OptIn(ExperimentalGetImage::class)
-    suspend fun scanImageForText(imageProxy: ImageProxy): String {
-        val mediaImage = imageProxy.image ?: throw IllegalStateException()
-        val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+    suspend fun scanImageForText(image: Bitmap): String {
         return suspendCoroutine { cont ->
-            textRecognizer.process(image).addOnSuccessListener {
+            textRecognizer.process(InputImage.fromBitmap(image, 0)).addOnSuccessListener {
                 cont.resume(it.text)
             }.addOnFailureListener {
                 cont.resumeWithException(it)
