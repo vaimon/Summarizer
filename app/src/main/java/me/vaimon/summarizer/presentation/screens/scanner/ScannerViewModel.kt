@@ -64,9 +64,21 @@ class ScannerViewModel @Inject constructor(
             scannerMode = ScannerMode.Preview,
         )
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isProcessing = true
+            )
+
             try {
-                _capturedImage.value?.let {
-                    _scannedText.value = mlManager.scanImageForText(it)
+                _boundingBox.value?.scaledValues?.let { scaledBox ->
+                    Bitmap.createBitmap(
+                        _capturedImage.value!!,
+                        scaledBox.first.x,
+                        scaledBox.first.y,
+                        scaledBox.second,
+                        scaledBox.third
+                    ).let {
+                        _scannedText.value = mlManager.scanImageForText(it)
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("ScannerML", "Error processing image", e)

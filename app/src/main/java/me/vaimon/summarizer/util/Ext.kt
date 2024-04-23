@@ -16,4 +16,4 @@ fun Float.toDp(): Dp {
     return (this / Resources.getSystem().displayMetrics.density).dp
 }
 
-data class PointDp(val x: Dp, val y: Dp)
+fun Dp.toPx(): Int = (this.value * Resources.getSystem().displayMetrics.density).toInt()
