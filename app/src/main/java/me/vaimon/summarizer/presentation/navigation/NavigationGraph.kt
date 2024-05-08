@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import me.vaimon.summarizer.presentation.models.SummarizationType
 import me.vaimon.summarizer.presentation.screens.home.HomeScreen
 import me.vaimon.summarizer.presentation.screens.home.HomeScreenDestination
 import me.vaimon.summarizer.presentation.screens.scanner.ScannerDestination
@@ -36,8 +37,11 @@ fun NavigationGraph() {
         composable(
             route = SummarizationDestination.route,
             arguments = listOf(
-                navArgument(SummarizationDestination.argName) {
+                navArgument(SummarizationDestination.arg1Name) {
                     type = NavType.StringType
+                },
+                navArgument(SummarizationDestination.arg2Name) {
+                    type = NavType.EnumType(SummarizationType::class.java)
                 }
             ),
             enterTransition = {

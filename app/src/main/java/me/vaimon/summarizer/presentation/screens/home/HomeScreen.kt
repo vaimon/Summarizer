@@ -36,7 +36,7 @@ import me.vaimon.summarizer.R
 import me.vaimon.summarizer.presentation.models.SummarizedText
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
 import me.vaimon.summarizer.presentation.screens.components.SummarizationResultViewer
-import me.vaimon.summarizer.presentation.screens.home.components.InputTextField
+import me.vaimon.summarizer.presentation.screens.home.components.InputTextEditor
 import me.vaimon.summarizer.presentation.screens.home.components.SummarizationHistoryGrid
 import me.vaimon.summarizer.presentation.screens.scanner.ScannerDestination
 import me.vaimon.summarizer.presentation.screens.summarization.SummarizationDestination
@@ -92,7 +92,8 @@ fun HomeScreen(
                 cameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
             }
         },
-        onHistoryEntryClick = viewModel::onSummarizationHistoryEntryClick
+        onHistoryEntryClick = viewModel::onSummarizationHistoryEntryClick,
+        onSummarizationModeSelected = viewModel::onSummarizationModeSelected
     )
 
     uiState.priorSummarizationDetails?.let {
@@ -116,7 +117,7 @@ fun HomeScreen(
         uiState.summarizationNavigationArg?.let {
             viewModel.onNavigateToSummarizationHandled()
             navController.navigate(
-                SummarizationDestination.getDestinationWithArg(it)
+                SummarizationDestination.getDestinationWithArgs(it.first, it.second),
             )
         }
     }
@@ -140,6 +141,7 @@ fun HomeBody(
     onBtnSummarizeClick: () -> Unit,
     onBtnCameraClick: () -> Unit,
     onHistoryEntryClick: (SummarizedText) -> Unit,
+    onSummarizationModeSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -153,11 +155,12 @@ fun HomeBody(
         }
     ) {
         Column(modifier = modifier.padding(it)) {
-            InputTextField(
+            InputTextEditor(
                 inputText = inputText,
                 onInputTextChanged = onInputTextChanged,
                 onBtnSummarizeClick = onBtnSummarizeClick,
-                onBtnCameraClick = onBtnCameraClick
+                onBtnCameraClick = onBtnCameraClick,
+                onSummarizationModeSelected = onSummarizationModeSelected
             )
             SummarizationHistoryGrid(summarizationHistory, onHistoryEntryClick)
         }
@@ -178,7 +181,8 @@ fun HomePreview() {
                 onInputTextChanged = {},
                 onBtnSummarizeClick = {},
                 onBtnCameraClick = {},
-                onHistoryEntryClick = {}
+                onHistoryEntryClick = {},
+                onSummarizationModeSelected = {}
             )
         }
     }

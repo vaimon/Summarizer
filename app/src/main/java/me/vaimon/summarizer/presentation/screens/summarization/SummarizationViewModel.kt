@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import me.vaimon.summarizer.domain.usecase.ReadInputTextUseCase
 import me.vaimon.summarizer.domain.usecase.SaveSummarizationUseCase
+import me.vaimon.summarizer.presentation.models.SummarizationType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +23,10 @@ class SummarizationViewModel @Inject constructor(
     private val saveSummarizationUseCase: SaveSummarizationUseCase
 ) : ViewModel() {
     private val pathToInputText =
-        checkNotNull(savedStateHandle.get<String>(SummarizationDestination.argName))
+        checkNotNull(savedStateHandle.get<String>(SummarizationDestination.arg1Name))
+
+    private val summarizationType =
+        checkNotNull(savedStateHandle.get<SummarizationType>(SummarizationDestination.arg2Name))
 
     private val _inputText: MutableStateFlow<String> = MutableStateFlow("")
     val inputText = _inputText.asStateFlow()

@@ -23,11 +23,12 @@ import me.vaimon.summarizer.presentation.screens.components.SecondaryActionButto
 import me.vaimon.summarizer.presentation.theme.secondaryBackground
 
 @Composable
-fun InputTextField(
+fun InputTextEditor(
     inputText: String,
     onInputTextChanged: (String) -> Unit,
     onBtnSummarizeClick: () -> Unit,
     onBtnCameraClick: () -> Unit,
+    onSummarizationModeSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -37,6 +38,15 @@ fun InputTextField(
             .aspectRatio(1f)
     ) {
         val clipboardManager: ClipboardManager = LocalClipboardManager.current
+
+        OptionSetSwitch(
+            options = listOf(
+                stringResource(R.string.summarization_desc_extractive),
+                stringResource(R.string.summarization_desc_abstractive)
+            ),
+            onOptionSelected = { index, _ -> onSummarizationModeSelected(index) },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
 
         TextField(
             value = inputText,

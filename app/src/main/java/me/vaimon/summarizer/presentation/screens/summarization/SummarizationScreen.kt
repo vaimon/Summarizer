@@ -29,14 +29,16 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import me.vaimon.summarizer.R
-import me.vaimon.summarizer.presentation.navigation.NavigationDestinationWithArg
+import me.vaimon.summarizer.presentation.models.SummarizationType
+import me.vaimon.summarizer.presentation.navigation.NavigationDestinationWithArgs
 import me.vaimon.summarizer.presentation.screens.components.SummarizationResultViewer
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
 import me.vaimon.summarizer.util.PreviewData
 
-object SummarizationDestination : NavigationDestinationWithArg<String>() {
+object SummarizationDestination : NavigationDestinationWithArgs<String, SummarizationType>() {
     override val routeBase = "summarization"
-    override val argName = "inputFilePath"
+    override val arg1Name = "inputFilePath"
+    override val arg2Name = "summarizationTypeId"
 }
 
 @Composable

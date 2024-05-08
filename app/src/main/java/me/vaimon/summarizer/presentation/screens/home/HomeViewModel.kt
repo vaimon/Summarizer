@@ -14,6 +14,7 @@ import me.vaimon.summarizer.domain.entity.SummarizedTextEntity
 import me.vaimon.summarizer.domain.usecase.GetSummarizationHistoryUseCase
 import me.vaimon.summarizer.domain.usecase.ReadInputTextUseCase
 import me.vaimon.summarizer.domain.usecase.SaveTextToCacheUseCase
+import me.vaimon.summarizer.presentation.models.SummarizationType
 import me.vaimon.summarizer.presentation.models.SummarizedText
 import me.vaimon.summarizer.util.Mapper
 import javax.inject.Inject
@@ -27,6 +28,8 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _inputText = MutableStateFlow("")
     val inputText = _inputText.asStateFlow()
+
+    private val summarizationType = MutableStateFlow(SummarizationType.Extractive)
 
     val summarizationHistory = getSummarizationHistoryUseCase().map { list ->
         list.map { summarizedTextMapper.from(it) }
@@ -42,7 +45,8 @@ class HomeViewModel @Inject constructor(
     fun onBtnSummarizeClick() {
         viewModelScope.launch {
             val outputFileName = saveTextToCacheUseCase(inputText.value)
-            _uiState.value = _uiState.value.copy(summarizationNavigationArg = outputFileName)
+            _uiState.value =
+                _uiState.value.copy(summarizationNavigationArg = outputFileName to summarizationType.value)
         }
     }
 
@@ -64,8 +68,12 @@ class HomeViewModel @Inject constructor(
         _uiState.update { it.copy(priorSummarizationDetails = null) }
     }
 
+    fun onSummarizationModeSelected(option: Int) {
+        summarizationType.value = SummarizationType.entries[option]
+    }
+
     data class UiState(
-        val summarizationNavigationArg: String? = null,
+        val summarizationNavigationArg: Pair<String, SummarizationType>? = null,
         val priorSummarizationDetails: SummarizedText? = null
     )
 }
