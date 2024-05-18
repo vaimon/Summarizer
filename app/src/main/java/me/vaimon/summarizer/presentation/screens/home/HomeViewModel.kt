@@ -23,13 +23,17 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val saveTextToCacheUseCase: SaveTextToCacheUseCase,
     private val readInputTextUseCase: ReadInputTextUseCase,
-    private val getSummarizationHistoryUseCase: GetSummarizationHistoryUseCase,
+    getSummarizationHistoryUseCase: GetSummarizationHistoryUseCase,
     private val summarizedTextMapper: Mapper<SummarizedText, SummarizedTextEntity>
 ) : ViewModel() {
     private val _inputText = MutableStateFlow("")
     val inputText = _inputText.asStateFlow()
 
-    private val summarizationType = MutableStateFlow(SummarizationType.Extractive)
+    private val _summarizationType = MutableStateFlow(SummarizationType.Extractive)
+    val summarizationType = _summarizationType.asStateFlow()
+
+    private val _compressionRate = MutableStateFlow(0.5f)
+    val compressionRate = _compressionRate.asStateFlow()
 
     val summarizationHistory = getSummarizationHistoryUseCase().map { list ->
         list.map { summarizedTextMapper.from(it) }
@@ -46,7 +50,13 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val outputFileName = saveTextToCacheUseCase(inputText.value)
             _uiState.value =
-                _uiState.value.copy(summarizationNavigationArg = outputFileName to summarizationType.value)
+                _uiState.value.copy(
+                    summarizationNavigationArg = Triple(
+                        outputFileName,
+                        summarizationType.value,
+                        compressionRate.value
+                    )
+                )
         }
     }
 
@@ -69,11 +79,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSummarizationModeSelected(option: Int) {
-        summarizationType.value = SummarizationType.entries[option]
+        _summarizationType.value = SummarizationType.entries[option]
+    }
+
+    fun onCompressionRateChanged(newRate: Float) {
+        _compressionRate.value = newRate
     }
 
     data class UiState(
-        val summarizationNavigationArg: Pair<String, SummarizationType>? = null,
+        val summarizationNavigationArg: Triple<String, SummarizationType, Float>? = null,
         val priorSummarizationDetails: SummarizedText? = null
     )
 }

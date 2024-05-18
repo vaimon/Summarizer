@@ -5,9 +5,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import me.vaimon.summarizer.data.repository.CacheRepositoryImpl
-import me.vaimon.summarizer.data.repository.SummarizationHistoryRepositoryImpl
+import me.vaimon.summarizer.data.repository.SummarizationRepositoryImpl
 import me.vaimon.summarizer.domain.repository.CacheRepository
-import me.vaimon.summarizer.domain.repository.SummarizationHistoryRepository
+import me.vaimon.summarizer.domain.repository.SummarizationRepository
 import javax.inject.Singleton
 
 @Module
@@ -20,7 +20,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideSummarizationHistoryRepository(repo: SummarizationHistoryRepositoryImpl): SummarizationHistoryRepository =
+    fun provideSummarizationHistoryRepository(repo: SummarizationRepositoryImpl): SummarizationRepository =
         repo
 
 }

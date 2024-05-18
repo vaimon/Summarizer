@@ -12,12 +12,13 @@ abstract class NavigationDestinationWithArg<T> : NavigationDestination {
 
     fun getDestinationWithArg(arg: T) = "$routeBase/$arg"
 }
-abstract class NavigationDestinationWithArgs<T, S> : NavigationDestination {
+abstract class NavigationDestinationWithArgs<T, S, V> : NavigationDestination {
     abstract val routeBase: String
     abstract val arg1Name: String
     abstract val arg2Name: String
+    abstract val arg3Name: String
     override val route: String
-        get() = "$routeBase/{$arg1Name}/{$arg2Name}"
+        get() = "$routeBase/{$arg1Name}/{$arg2Name}/{$arg3Name}"
 
-    fun getDestinationWithArgs(arg1: T, arg2: S) = "$routeBase/$arg1/$arg2"
+    fun getDestinationWithArgs(arg1: T, arg2: S, arg3: V) = "$routeBase/$arg1/$arg2/$arg3"
 }
