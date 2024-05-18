@@ -35,10 +35,11 @@ import me.vaimon.summarizer.presentation.screens.components.SummarizationResultV
 import me.vaimon.summarizer.presentation.theme.SummarizerTheme
 import me.vaimon.summarizer.util.PreviewData
 
-object SummarizationDestination : NavigationDestinationWithArgs<String, SummarizationType>() {
+object SummarizationDestination : NavigationDestinationWithArgs<String, SummarizationType, Float>() {
     override val routeBase = "summarization"
     override val arg1Name = "inputFilePath"
     override val arg2Name = "summarizationTypeId"
+    override val arg3Name = "compressionRate"
 }
 
 @Composable

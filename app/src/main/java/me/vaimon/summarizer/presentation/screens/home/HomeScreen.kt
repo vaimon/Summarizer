@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.vaimon.summarizer.R
+import me.vaimon.summarizer.presentation.models.SummarizationType
 import me.vaimon.summarizer.presentation.models.SummarizedText
 import me.vaimon.summarizer.presentation.navigation.NavigationDestination
 import me.vaimon.summarizer.presentation.screens.components.SummarizationResultViewer
@@ -54,6 +55,8 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val inputText by viewModel.inputText.collectAsState()
+    val compressionRate by viewModel.compressionRate.collectAsState()
+    val selectedType by viewModel.summarizationType.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
     val summarizationHistory by viewModel.summarizationHistory.collectAsState()
 
@@ -79,6 +82,8 @@ fun HomeScreen(
     HomeBody(
         inputText = inputText,
         summarizationHistory = summarizationHistory,
+        selectedType = selectedType,
+        compressionRate = compressionRate,
         onInputTextChanged = viewModel::onInputTextChanged,
         onBtnSummarizeClick = viewModel::onBtnSummarizeClick,
         onBtnCameraClick = {
@@ -93,7 +98,8 @@ fun HomeScreen(
             }
         },
         onHistoryEntryClick = viewModel::onSummarizationHistoryEntryClick,
-        onSummarizationModeSelected = viewModel::onSummarizationModeSelected
+        onSummarizationModeSelected = viewModel::onSummarizationModeSelected,
+        onCompressionRateChanged = viewModel::onCompressionRateChanged
     )
 
     uiState.priorSummarizationDetails?.let {
@@ -117,7 +123,7 @@ fun HomeScreen(
         uiState.summarizationNavigationArg?.let {
             viewModel.onNavigateToSummarizationHandled()
             navController.navigate(
-                SummarizationDestination.getDestinationWithArgs(it.first, it.second),
+                SummarizationDestination.getDestinationWithArgs(it.first, it.second, it.third),
             )
         }
     }
@@ -136,12 +142,15 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     inputText: String,
+    selectedType: SummarizationType,
+    compressionRate: Float,
     summarizationHistory: List<SummarizedText>,
     onInputTextChanged: (String) -> Unit,
     onBtnSummarizeClick: () -> Unit,
     onBtnCameraClick: () -> Unit,
     onHistoryEntryClick: (SummarizedText) -> Unit,
     onSummarizationModeSelected: (Int) -> Unit,
+    onCompressionRateChanged: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -157,10 +166,13 @@ fun HomeBody(
         Column(modifier = modifier.padding(it)) {
             InputTextEditor(
                 inputText = inputText,
+                selectedType = selectedType,
+                compressionRate = compressionRate,
                 onInputTextChanged = onInputTextChanged,
                 onBtnSummarizeClick = onBtnSummarizeClick,
                 onBtnCameraClick = onBtnCameraClick,
-                onSummarizationModeSelected = onSummarizationModeSelected
+                onSummarizationModeSelected = onSummarizationModeSelected,
+                onCompressionRateChanged = onCompressionRateChanged
             )
             SummarizationHistoryGrid(summarizationHistory, onHistoryEntryClick)
         }
@@ -177,12 +189,15 @@ fun HomePreview() {
         ) {
             HomeBody(
                 inputText = "",
+                compressionRate = 0.7f,
+                selectedType = SummarizationType.Extractive,
                 summarizationHistory = emptyList(),
                 onInputTextChanged = {},
                 onBtnSummarizeClick = {},
                 onBtnCameraClick = {},
                 onHistoryEntryClick = {},
-                onSummarizationModeSelected = {}
+                onSummarizationModeSelected = {},
+                onCompressionRateChanged = {}
             )
         }
     }

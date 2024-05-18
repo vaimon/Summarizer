@@ -22,6 +22,8 @@ lottieVersion = "6.4.0"
 
 camerax = "1.4.0-alpha04"
 
+retrofit = "2.9.0"
+
 hilt = "2.50"
 hilt-navigation = "1.2.0"
 
@@ -49,6 +51,9 @@ camera-mlkit = { group = "androidx.camera", name = "camera-mlkit-vision", versio
 camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camerax" }
 
 mlkit-text = { group = "com.google.mlkit", name = "text-recognition", version = "16.0.0" }
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
