@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Summarizer</string>
+    <string name="title_summarization_history">История суммаризаций</string>
+    <string name="placeholder_input_text">Текст, который вы хотели бы сократить...</string>
+    <string name="title_summarization">Суммаризация</string>
+    <string name="desc_back">Назад</string>
+    <string name="title_original_text">Оригинальный текст</string>
+    <string name="title_summarized_text">Суммаризованный текст</string>
+    <string name="desc_compression_rate">"Сокращен на "</string>
+    <string name="permission_camera_denial_warning">Эта функция недоступна без разрешения на использование камеры</string>
+    <string name="desc_error_scan">Во время сканирования произошла ошибка</string>
+    <string name="title_details">Подробности</string>
+    <string name="summarization_desc_extractive">Экстрактивная</string>
+    <string name="summarization_desc_abstractive">Абстрактивная</string>
+</resources>

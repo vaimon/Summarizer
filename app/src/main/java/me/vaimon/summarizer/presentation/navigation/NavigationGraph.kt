@@ -42,7 +42,10 @@ fun NavigationGraph() {
                 },
                 navArgument(SummarizationDestination.arg2Name) {
                     type = NavType.EnumType(SummarizationType::class.java)
-                }
+                },
+                navArgument(SummarizationDestination.arg3Name) {
+                    type = NavType.FloatType
+                },
             ),
             enterTransition = {
                 slideIntoContainer(

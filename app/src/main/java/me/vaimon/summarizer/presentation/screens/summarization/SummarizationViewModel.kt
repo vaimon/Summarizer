@@ -50,13 +50,17 @@ class SummarizationViewModel @Inject constructor(
         viewModelScope.launch {
             _inputText.value = readInputTextUseCase(pathToInputText)
 
-            when(summarizationType){
-                SummarizationType.Extractive -> {
-                    summarizationRepository.summarizeExtractive(inputText.value, summarizationCompressionRate)
+            try{
+                when(summarizationType){
+                    SummarizationType.Extractive -> {
+                        summarizationRepository.summarizeExtractive(inputText.value, summarizationCompressionRate)
+                    }
+                    SummarizationType.Abstractive -> {
+                        summarizationRepository.summarizeAbstractive(inputText.value)
+                    }
                 }
-                SummarizationType.Abstractive -> {
-                    summarizationRepository.summarizeAbstractive(inputText.value)
-                }
+            } catch(e: Exception){
+                inputText.value
             }.let{
                 _processedText.value = it
                 saveSummarizationUseCase(inputText.value, it, compressionRate.value ?: 0)
